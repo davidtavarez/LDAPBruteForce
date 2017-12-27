@@ -11,13 +11,20 @@ if (file_exists($arguments['u']) === false || file_exists($arguments['p']) === f
     exit(ERROR_FILE_NOT_FOUND);
 }
 
+$valid_users = array();
+
 $users_handle = fopen($arguments['u'], "r");
-while (!feof($users_handle)) {
-    $user = str_replace(array('.', "\n", "\t", "\r"), '', $trim(fgets($users_handle)));        
+while (!feof($users_handle))
+{
+    $user = str_replace(array('.', "\n", "\t", "\r"), '', trim(fgets($users_handle)));        
     $passwords_handle = fopen($arguments['p'], "r");
     while (!feof($passwords_handle)) 
     {
-        $password = str_replace(array("\n", "\t", "\r"), '', $trim(fgets($passwords_handle)));    
+        $password = str_replace(array("\n", "\t", "\r"), '', trim(fgets($passwords_handle)));
+        if(strlen($user) > 0 && strlen($password) > 0)
+        {
+            
+        }
     }
     fclose($passwords_handle);
 }
