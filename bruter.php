@@ -3,6 +3,8 @@ const ERROR_MISSING_ARGUMENTS = 1;
 const ERROR_CAN_NOT_CONNECT = 2;
 const ERROR_FILE_NOT_FOUND = 5;
 
+$valid_credentials = array();
+
 $arguments = getopt("s:u:p:");
 if (count($arguments) !== 3)
 {
@@ -14,14 +16,13 @@ if (file_exists($arguments['u']) === false || file_exists($arguments['p']) === f
 }
 
 $ldap_connection = ldap_connect($arguments['s']) or exit(ERROR_CAN_NOT_CONNECT);
-$valid_credentials = array();
-$users_handle = fopen($arguments['u'], 'r');
 $remove_chars = array(
     "\n",
     "\t",
     "\r"
 );
 
+$users_handle = fopen($arguments['u'], 'r');
 while (!feof($users_handle))
 {
     $user = str_replace($remove_chars, '', trim(fgets($users_handle)));
@@ -40,10 +41,8 @@ while (!feof($users_handle))
             }
         }
     }
-
     fclose($passwords_handle);
 }
-
 fclose($users_handle);
 
 foreach($valid_credentials as $credential)
