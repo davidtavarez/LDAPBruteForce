@@ -11,7 +11,7 @@ if (file_exists($arguments['u']) === false || file_exists($arguments['p']) === f
     exit(ERROR_FILE_NOT_FOUND);
 }
 
-$ldapconn = ldap_connect($arguments['s']) or exit(ERROR_CAN_NOT_CONNECT);
+$ldap_connection = ldap_connect($arguments['s']) or exit(ERROR_CAN_NOT_CONNECT);
 
 $valid_users = array();
 
@@ -25,7 +25,10 @@ while (!feof($users_handle))
         $password = str_replace(array("\n", "\t", "\r"), '', trim(fgets($passwords_handle)));
         if(strlen($user) > 0 && strlen($password) > 0)
         {
-
+            if(ldap_bind($ldap_connection, $user, $password))
+            {
+                $valid_users[] = array('user' => $user, 'password' => $password);
+            }
         }
     }
     fclose($passwords_handle);
