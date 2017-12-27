@@ -1,6 +1,6 @@
 <?php
 const ERROR_MISSING_ARGUMENTS = 1;
-const ERROR_LDAP_NOT_FOUND = 2;
+const ERROR_CAN_NOT_CONNECT = 2;
 const ERROR_FILE_NOT_FOUND = 5;
 
 $arguments = getopt("s:u:p:");
@@ -10,6 +10,8 @@ if(count($arguments) !== 3 ){
 if (file_exists($arguments['u']) === false || file_exists($arguments['p']) === false){
     exit(ERROR_FILE_NOT_FOUND);
 }
+
+$ldapconn = ldap_connect($arguments['s']) or exit(ERROR_CAN_NOT_CONNECT);
 
 $valid_users = array();
 
@@ -23,7 +25,7 @@ while (!feof($users_handle))
         $password = str_replace(array("\n", "\t", "\r"), '', trim(fgets($passwords_handle)));
         if(strlen($user) > 0 && strlen($password) > 0)
         {
-            
+
         }
     }
     fclose($passwords_handle);
